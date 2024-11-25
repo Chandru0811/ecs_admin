@@ -1,9 +1,9 @@
 import React from "react";
 
-function Dashboard({ handleLogout }) {
+function Dashboard() {
   return (
-    <div>
-      Dashboard <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+    <div className="card shadow border-0 mx-2 align-items-center justify-content-center" style={{ minHeight: "80vh", borderRadius: "0px" }}>
+      <h2>Coming Soon ....</h2>
     </div>
   );
 }
