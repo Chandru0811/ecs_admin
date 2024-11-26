@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "../pages/client/Home";
+import Login from "../components/client/auth/Login";
 import "../styles/client.css";
 function Client({
   handleLogout,
@@ -13,7 +13,7 @@ function Client({
       <div>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home handleLogin={handleLogin} />} />
+            <Route path="/" element={<Login handleLogin={handleLogin} />} />
           </Routes>
         </BrowserRouter>
       </div>

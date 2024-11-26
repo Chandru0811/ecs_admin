@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
@@ -7,34 +7,39 @@ import { GoEye } from "react-icons/go";
 import { FaRegEdit } from "react-icons/fa";
 import DeleteModel from "../../../components/admin/DeleteModel";
 
-const Employee = () => {
+const Attendance = () => {
   const tableRef = useRef(null);
+
+  const [selectedDate, setSelectedDate] = useState("");
 
   const datas = [
     {
       id: 1,
       employeeId: "ECS001",
       name: "Ragul",
-      mobile: "9876543210",
-      email: "ragul@gmail.com",
+      checkIn: "10.00 AM",
+      checkOut: "07.00 PM",
     },
     {
       id: 2,
       employeeId: "ECS002",
       name: "Sakthivel",
-      mobile: "9123456780",
-      email: "sakthivel@gmail.com",
+      checkIn: "10.10 AM",
+      checkOut: "07.00 PM",
     },
     {
       id: 3,
       employeeId: "ECS003",
       name: "prem",
-      mobile: "9876543210",
-      email: "prem@gmail.com",
-    }
+      checkIn: "10.00 AM",
+      checkOut: "07.10 PM",
+    },
   ];
 
   useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setSelectedDate(today);
+
     const table = $(tableRef.current).DataTable();
 
     return () => {
@@ -49,12 +54,12 @@ const Employee = () => {
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight fw-semibold">Employee</h1>
+                <h1 className="h4 ls-tight fw-semibold">Attendance</h1>
               </div>
             </div>
             <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
-                <Link to="/employee/add">
+                <Link to="/attendance/add">
                   <button type="submit" className="btn btn-sm btn-button">
                     <span>Add +</span>
                   </button>
@@ -65,6 +70,18 @@ const Employee = () => {
         </div>
       </div>
       <div className="card shadow border-0 mt-2" style={{ minHeight: "69vh", borderRadius: "0px" }}>
+        <div className="container-fluid row py-4">
+          <div className="col-md-8 col-12"></div>
+          <div className="col-md-4 col-12">
+            <input
+              type="date"
+              className="form-control"
+              value={selectedDate}
+              max={new Date().toISOString().split("T")[0]}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </div>
+        </div>
         <div className="table-responsive p-2 minHeight">
           <table ref={tableRef} className="display table ">
             <thead className="thead-light">
@@ -74,8 +91,8 @@ const Employee = () => {
                 </th>
                 <th scope="col" className="text-center">Employee ID</th>
                 <th scope="col" className="text-center">Employee Name</th>
-                <th scope="col" className="text-center">Mobile</th>
-                <th scope="col" className="text-center">Email</th>
+                <th scope="col" className="text-center">Check In</th>
+                <th scope="col" className="text-center">Check Out</th>
                 <th scope="col" className="text-center">Action</th>
               </tr>
             </thead>
@@ -85,16 +102,16 @@ const Employee = () => {
                   <td className="text-center">{index + 1}</td>
                   <td className="text-center">{data.employeeId}</td>
                   <td className="text-center">{data.name}</td>
-                  <td className="text-center">{data.mobile}</td>
-                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{data.checkIn}</td>
+                  <td className="text-center">{data.checkOut}</td>
                   <td className="text-center">
                     <div>
-                      <Link to="/employee/view">
+                      <Link to="/attendance/view">
                         <button className="btn btn-sm ps-0 shadow-none border-none">
                           <GoEye />
                         </button>
                       </Link>
-                      <Link to="/employee/edit">
+                      <Link to="/attendance/edit">
                         <button className="btn btn-sm shadow-none border-none">
                           <FaRegEdit />
                         </button>
@@ -112,4 +129,4 @@ const Employee = () => {
   );
 };
 
-export default Employee;
+export default Attendance;

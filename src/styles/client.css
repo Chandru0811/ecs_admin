@@ -13,3 +13,77 @@
   --admin-background-color: #ad8c5c;
   --admin-text-color: #fff;
 }
+
+
+.login_logo img {
+  padding: 30px 10px 75px;
+}
+
+.login_card {
+  border: 1px solid #116ffcb9;
+  border-radius: 20px;
+}
+
+.login_title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #116ffcdf;
+}
+
+.login_inputs {
+  padding: 1px;
+  border: 1px solid #116ffcdf;
+  color: #116ffcdf;
+  border-radius: 10px;
+}
+
+.login_inputs input {
+  padding: 10px 0 !important;
+  margin: 0 3px !important;
+  border: 0 !important;
+}
+
+.login_inputs span {
+  border: none !important;
+  background: none !important;
+  border-radius: 10px;
+  color: #116ffcdf !important;
+}
+
+input:focus {
+  box-shadow: none !important;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0px 1000px #fff !important;
+  box-shadow: inset 0 0 0px 1000px #fff !important;
+  color: #000 !important;
+}
+
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover {
+  -webkit-box-shadow: inset 0 0 0px 1000px #fff !important;
+  box-shadow: inset 0 0 0px 1000px #fff !important;
+  color: #000 !important;
+}
+
+.login_submit {
+  background-color: #116ffcdf;
+  color: white;
+  border: 2px solid #116ffcdf;
+  border-radius: 10px;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.login_submit:focus{
+  box-shadow: none;
+}
+
+.login_submit:hover,
+.login_submit.active {
+  background-color: #fff !important;
+  color: #116ffcdf !important;
+  border: 2px solid #116ffcdf !important;
+}

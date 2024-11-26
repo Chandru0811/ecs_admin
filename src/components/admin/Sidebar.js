@@ -4,6 +4,7 @@ import Logo from "../../assets/Logo.png";
 import { BsBarChartFill } from "react-icons/bs";
 import { IoPeople } from "react-icons/io5";
 import { BiLogOut } from "react-icons/bi";
+import { FaClipboardList } from "react-icons/fa";
 
 function Sidebar({ handleLogout }) {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ function Sidebar({ handleLogout }) {
               height: "45px",
             }}
           />
-          <p className="text-white">ECS</p>
+          <p className="text-white">ECS Admin</p>
         </NavLink>
         <div
           className="collapse navbar-collapse"
@@ -65,6 +66,12 @@ function Sidebar({ handleLogout }) {
               <NavLink className="nav-link" to="/employee">
               <IoPeople />
                 Employee
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/attendance">
+              <FaClipboardList />
+                Attendance
               </NavLink>
             </li>
           </ul>

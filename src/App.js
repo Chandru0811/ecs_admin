@@ -8,6 +8,7 @@ function App() {
   const [isClientLogin, setIsClientLogin] = useState(false);
 
   const handleLogin = () => {
+    toast.success("LoggedIn Successfully");
     sessionStorage.setItem("isAuthenticated", true);
     setIsAuthenticated(true);
   };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { MdDelete } from "react-icons/md";
+import { BiTrashAlt } from "react-icons/bi";
 
 const DeleteModel = () => {
   const [show, setShow] = useState(false);
@@ -13,7 +13,7 @@ const DeleteModel = () => {
         className="btn btn-sm shadow-none border-none"
         onClick={handleShow}
       >
-        <MdDelete />
+        <BiTrashAlt />
       </button>
 
       <Modal show={show} onHide={handleClose}>
