@@ -1,5 +1,5 @@
-import React from "react";
-import { FaUser, FaLock } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import LoginImage from "../../../assets/login_image.png";
 import Logo from "../../../assets/logo.webp";
 import { useFormik } from "formik";
@@ -11,6 +11,7 @@ import { FiAlertTriangle } from "react-icons/fi";
 
 function Login({ handleLogin }) {
   const navigate = useNavigate();
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
   const validationSchema = Yup.object().shape({
     emp_id: Yup.string().required("*Employee ID is required"),
@@ -56,6 +57,11 @@ function Login({ handleLogin }) {
     },
   });
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
   return (
     <section className="login">
       <div className="container">
@@ -100,7 +106,7 @@ function Login({ handleLogin }) {
                         <FaLock />
                       </span>
                       <input
-                        type="password"
+                        type={passwordVisible ? "text" : "password"} // Toggle password visibility
                         className="form-control"
                         id="password"
                         placeholder="Password"
@@ -108,6 +114,14 @@ function Login({ handleLogin }) {
                         name="password"
                         {...formik.getFieldProps("password")}
                       />
+                      <span
+                        className="input-group-text"
+                        id="basic-addon2"
+                        style={{ cursor: "pointer" }}
+                        onClick={togglePasswordVisibility}
+                      >
+                        {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                      </span>
                     </div>
                     {formik.touched.password && formik.errors.password && (
                       <div className="invalid-feedback d-block">
