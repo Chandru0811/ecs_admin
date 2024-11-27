@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Admin from "./layouts/Admin";
 import Client from "./layouts/Client";
+import api from "./config/URL";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isClientLogin, setIsClientLogin] = useState(false);
 
   const handleLogin = () => {
-    toast.success("LoggedIn Successfully");
     sessionStorage.setItem("isAuthenticated", true);
     setIsAuthenticated(true);
   };
@@ -20,11 +20,13 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      toast.success("Logout Successfully");
-      setIsAuthenticated(false);
-      setIsClientLogin(false);
-      sessionStorage.removeItem("isAuthenticated");
-      sessionStorage.removeItem("isClientLogin");
+      const response = await api.post('logout');
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setIsAuthenticated(false);
+        setIsClientLogin(false);
+        sessionStorage.removeItem("token");
+      }
     } catch (error) {
       toast.error("Logout Unsuccessfull");
     }

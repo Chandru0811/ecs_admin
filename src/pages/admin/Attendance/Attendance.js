@@ -57,7 +57,7 @@ const Attendance = () => {
                 <h1 className="h4 ls-tight fw-semibold">Attendance</h1>
               </div>
             </div>
-            <div className="col-auto">
+            {/* <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
                 <Link to="/attendance/add">
                   <button type="submit" className="btn btn-sm btn-button">
@@ -65,7 +65,7 @@ const Attendance = () => {
                   </button>
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -93,18 +93,18 @@ const Attendance = () => {
                 <th scope="col" className="text-center">Employee Name</th>
                 <th scope="col" className="text-center">Check In</th>
                 <th scope="col" className="text-center">Check Out</th>
-                <th scope="col" className="text-center">Action</th>
+                {/* <th scope="col" className="text-center">Action</th> */}
               </tr>
             </thead>
             <tbody>
               {datas.map((data, index) => (
                 <tr key={index}>
                   <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{data.employeeId}</td>
+                  <td className="text-center">{data.emp_id}</td>
                   <td className="text-center">{data.name}</td>
                   <td className="text-center">{data.checkIn}</td>
                   <td className="text-center">{data.checkOut}</td>
-                  <td className="text-center">
+                  {/* <td className="text-center">
                     <div>
                       <Link to="/attendance/view">
                         <button className="btn btn-sm ps-0 shadow-none border-none">
@@ -118,7 +118,7 @@ const Attendance = () => {
                       </Link>
                       <DeleteModel />
                     </div>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

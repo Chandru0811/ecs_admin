@@ -4,22 +4,55 @@ import LoginImage from "../../../assets/login_image.png";
 import Logo from "../../../assets/logo.webp";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../../../config/URL";
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { FiAlertTriangle } from "react-icons/fi";
 
 function Login({ handleLogin }) {
+    const navigate = useNavigate();
+
     const validationSchema = Yup.object().shape({
-        employeeId: Yup.string().required("*Employee ID is required"),
+        emp_id: Yup.string().required("*Employee ID is required"),
         password: Yup.string().required("*Password is required"),
     });
 
     const formik = useFormik({
         initialValues: {
-            employeeId: "",
+            emp_id: "",
             password: "",
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            console.log("Login Datas:", values);
-            handleLogin(values);
+            try {
+                const response = await api.post(`emp/login`, values);
+                if (response.status === 200) {
+                    const { token, userDetails } = response.data.data;
+                    sessionStorage.setItem('token', token);
+                    sessionStorage.setItem('userRole', userDetails.role);
+                    if (userDetails.role === 1) {
+                        handleLogin(values);
+                        navigate('/admin');
+                        toast.success(response.data.message);
+                    } else if (userDetails.role === 2) {
+                        toast.error("You don't have authorization to access this.");
+                    } else {
+                        toast.error(response.data.message);
+                    }
+                }
+            } catch (error) {
+                if (error.response.status === 400) {
+                    const errorMessage = error.response.data.message;
+                    if (errorMessage) {
+                        toast(errorMessage, {
+                            icon: <FiAlertTriangle className="text-warning" />,
+                        });
+                    }
+                } else {
+                    console.error("API Error", error);
+                    toast.error("An unexpected error occurred.");
+                }
+            }
         },
     });
 
@@ -48,16 +81,16 @@ function Login({ handleLogin }) {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="employeeId"
+                                                name="emp_id"
                                                 placeholder="Employee ID"
                                                 aria-label="Employee ID"
-                                                className={`form-control ${formik.touched.employeeId && formik.errors.employeeId ? "is-invalid" : ""}`}
-                                                {...formik.getFieldProps("employeeId")}
+                                                className={`form-control ${formik.touched.emp_id && formik.errors.emp_id ? "is-invalid" : ""}`}
+                                                {...formik.getFieldProps("emp_id")}
                                             />
                                         </div>
-                                        {formik.touched.employeeId && formik.errors.employeeId && (
+                                        {formik.touched.emp_id && formik.errors.emp_id && (
                                             <div className="invalid-feedback d-block">
-                                                {formik.errors.employeeId}
+                                                {formik.errors.emp_id}
                                             </div>
                                         )}
                                     </div>
