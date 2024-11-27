@@ -18,7 +18,7 @@ import AttendanceView from "../pages/admin/Attendance/AttendanceView";
 function Admin({ handleLogout }) {
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin">
         <div className="d-flex flex-column flex-lg-row bg-surface-secondary ">
           <Sidebar handleLogout={handleLogout} />
           <div className="flex-grow-1 h-screen overflow-y-lg-auto">

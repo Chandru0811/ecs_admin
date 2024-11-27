@@ -11,7 +11,7 @@ function Client({
   return (
     <div>
       <div>
-        <BrowserRouter>
+        <BrowserRouter basename="/admin">
           <Routes>
             <Route path="/" element={<Login handleLogin={handleLogin} />} />
           </Routes>
