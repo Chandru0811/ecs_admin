@@ -55,9 +55,12 @@ const Attendance = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await api.post("admin/employees/attendance", {
-          date: selectedDate,
-        });
+        const response = await api.get(
+          `admin/allEmpAttendance?date=${selectedDate}`,
+          {
+            date: selectedDate,
+          }
+        );
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -73,10 +76,11 @@ const Attendance = () => {
   }, [selectedDate]);
 
   function formatTimeTo12Hour(time) {
-    const [hour, minute] = time.split(":"); // Split time into components
-    const hour12 = hour % 12 || 12; // Convert 24-hour to 12-hour format
-    const period = hour >= 12 ? "PM" : "AM"; // Determine AM/PM
-    return `${hour12}:${minute} ${period}`; // Format as HH:MM AM/PM
+      if (!time) return ""; 
+    const [hour, minute] = time.split(":");
+    const hour12 = hour % 12 || 12; 
+    const period = hour >= 12 ? "PM" : "AM"; 
+    return `${hour12}:${minute} ${period}`; 
   }
 
   return (
@@ -150,8 +154,8 @@ const Attendance = () => {
               {datas.map((data, index) => (
                 <tr key={index}>
                   <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{data.emp_id}</td>
-                  <td className="text-center">{data.name}</td>
+                  <td className="text-center">{data.user.emp_id}</td>
+                  <td className="text-center">{data.user.name}</td>
                   <td className="text-center">
                     {formatTimeTo12Hour(data.checkin)}
                   </td>

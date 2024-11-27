@@ -54,7 +54,7 @@ const Employee = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await api.get("admin/employees");
+        const response = await api.get("admin/allEmps");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
