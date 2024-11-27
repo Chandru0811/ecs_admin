@@ -2,54 +2,89 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
-import { GoEye } from "react-icons/go";
-import { FaRegEdit } from "react-icons/fa";
-import DeleteModel from "../../../components/admin/DeleteModel";
+import api from "../../../config/URL";
+// import { Link } from "react-router-dom";
+// import { GoEye } from "react-icons/go";
+// import { FaRegEdit } from "react-icons/fa";
+// import DeleteModel from "../../../components/admin/DeleteModel";
 
 const Attendance = () => {
   const tableRef = useRef(null);
+  const today = new Date().toISOString().split("T")[0];
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [selectedDate, setSelectedDate] = useState("");
-
-  const datas = [
-    {
-      id: 1,
-      employeeId: "ECS001",
-      name: "Ragul",
-      checkIn: "10.00 AM",
-      checkOut: "07.00 PM",
-    },
-    {
-      id: 2,
-      employeeId: "ECS002",
-      name: "Sakthivel",
-      checkIn: "10.10 AM",
-      checkOut: "07.00 PM",
-    },
-    {
-      id: 3,
-      employeeId: "ECS003",
-      name: "prem",
-      checkIn: "10.00 AM",
-      checkOut: "07.10 PM",
-    },
-  ];
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
+    $(tableRef.current).DataTable({
+      columnDefs: [{ orderable: false, targets: -1 }],
+    });
+  };
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    setSelectedDate(today);
-
-    const table = $(tableRef.current).DataTable();
-
+    if (!loading) {
+      initializeDataTable();
+    }
     return () => {
-      table.destroy();
+      destroyDataTable();
     };
-  }, []);
+  }, [loading]);
+
+  const destroyDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+  };
+
+  // const refreshData = async () => {
+  //   destroyDataTable();
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get("admin/employees");
+  //     setDatas(response.data.data);
+  //   } catch (error) {
+  //     console.error("Error refreshing data:", error);
+  //   }
+  //   setLoading(false);
+  //   initializeDataTable();
+  // };
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await api.post("admin/employees/attendance", {
+          date: selectedDate,
+        });
+        setDatas(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (selectedDate !== "") {
+      fetchData();
+    }
+    // refreshData();
+  }, [selectedDate]);
+
+  function formatTimeTo12Hour(time) {
+    const [hour, minute] = time.split(":"); // Split time into components
+    const hour12 = hour % 12 || 12; // Convert 24-hour to 12-hour format
+    const period = hour >= 12 ? "PM" : "AM"; // Determine AM/PM
+    return `${hour12}:${minute} ${period}`; // Format as HH:MM AM/PM
+  }
 
   return (
     <section className="mx-2">
-      <div className="card shadow border-0 mb-2" style={{ borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mb-2"
+        style={{ borderRadius: "0px" }}
+      >
         <div className="container-fluid py-4">
           <div className="row align-items-center justify-content-between ">
             <div className="col">
@@ -69,7 +104,10 @@ const Attendance = () => {
           </div>
         </div>
       </div>
-      <div className="card shadow border-0 mt-2" style={{ minHeight: "69vh", borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mt-2"
+        style={{ minHeight: "69vh", borderRadius: "0px" }}
+      >
         <div className="container-fluid row py-4">
           <div className="col-md-8 col-12"></div>
           <div className="col-md-4 col-12">
@@ -86,13 +124,25 @@ const Attendance = () => {
           <table ref={tableRef} className="display table ">
             <thead className="thead-light">
               <tr>
-                <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
+                <th
+                  scope="col"
+                  className="text-center"
+                  style={{ whiteSpace: "nowrap" }}
+                >
                   S.NO
                 </th>
-                <th scope="col" className="text-center">Employee ID</th>
-                <th scope="col" className="text-center">Employee Name</th>
-                <th scope="col" className="text-center">Check In</th>
-                <th scope="col" className="text-center">Check Out</th>
+                <th scope="col" className="text-center">
+                  Employee ID
+                </th>
+                <th scope="col" className="text-center">
+                  Employee Name
+                </th>
+                <th scope="col" className="text-center">
+                  Check In
+                </th>
+                <th scope="col" className="text-center">
+                  Check Out
+                </th>
                 {/* <th scope="col" className="text-center">Action</th> */}
               </tr>
             </thead>
@@ -102,8 +152,12 @@ const Attendance = () => {
                   <td className="text-center">{index + 1}</td>
                   <td className="text-center">{data.emp_id}</td>
                   <td className="text-center">{data.name}</td>
-                  <td className="text-center">{data.checkIn}</td>
-                  <td className="text-center">{data.checkOut}</td>
+                  <td className="text-center">
+                    {formatTimeTo12Hour(data.checkin)}
+                  </td>
+                  <td className="text-center">
+                    {formatTimeTo12Hour(data.checkout)}
+                  </td>
                   {/* <td className="text-center">
                     <div>
                       <Link to="/attendance/view">

@@ -2,15 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
-import { GoEye } from "react-icons/go";
-import { FaRegEdit } from "react-icons/fa";
-import DeleteModel from "../../../components/admin/DeleteModel";
+// import { Link } from "react-router-dom";
+// import { GoEye } from "react-icons/go";
+// import { FaRegEdit } from "react-icons/fa";
+// import DeleteModel from "../../../components/admin/DeleteModel";
 import api from "../../../config/URL";
 
 const Employee = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -21,14 +22,14 @@ const Employee = () => {
     });
   };
 
-  // useEffect(() => {
-  //   if (!loading) {
-  //     initializeDataTable();
-  //   }
-  //   return () => {
-  //     destroyDataTable();
-  //   };
-  // }, [loading]);
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
   const destroyDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -36,48 +37,48 @@ const Employee = () => {
     }
   };
 
-  const refreshData = async () => {
-    destroyDataTable();
-    // setLoading(true);
-    try {
-      const response = await api.get("admin/employees");
-      setDatas(response.data.data);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    // setLoading(false);
-    initializeDataTable();
-  };
+  // const refreshData = async () => {
+  //   destroyDataTable();
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get("admin/employees");
+  //     setDatas(response.data.data);
+  //   } catch (error) {
+  //     console.error("Error refreshing data:", error);
+  //   }
+  //   setLoading(false);
+  //   initializeDataTable();
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
+      setLoading(true);
       try {
         const response = await api.get("admin/employees");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-      // setLoading(false);
-      initializeDataTable();
+      setLoading(false);
     };
-    fetchData();
-    refreshData();
 
-    return () => {
-      destroyDataTable();
-      fetchData();
-    };
+    fetchData();
+    // refreshData();
   }, []);
 
   return (
     <section className="mx-2">
-      <div className="card shadow border-0 mb-2" style={{ borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mb-2"
+        style={{ borderRadius: "0px" }}
+      >
         <div className="container-fluid py-4">
           <div className="row align-items-center justify-content-between ">
             <div className="col">
               <div className="d-flex align-items-center gap-4">
-                <h1 className="h4 ls-tight fw-semibold">Employee</h1>
+                <h1 className="h4 ls-tight fw-semibold">
+                  Employee {datas.length ?? ""}
+                </h1>
               </div>
             </div>
             {/* <div className="col-auto">
@@ -92,18 +93,33 @@ const Employee = () => {
           </div>
         </div>
       </div>
-      <div className="card shadow border-0 mt-2" style={{ minHeight: "69vh", borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mt-2"
+        style={{ minHeight: "69vh", borderRadius: "0px" }}
+      >
         <div className="table-responsive p-2 minHeight">
           <table ref={tableRef} className="display table ">
             <thead className="thead-light">
               <tr>
-                <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
+                <th
+                  scope="col"
+                  className="text-center"
+                  style={{ whiteSpace: "nowrap" }}
+                >
                   S.NO
                 </th>
-                <th scope="col" className="text-center">Employee ID</th>
-                <th scope="col" className="text-center">Employee Name</th>
-                <th scope="col" className="text-center">Email</th>
-                <th scope="col" className="text-center">Joining Date</th>
+                <th scope="col" className="text-center">
+                  Employee ID
+                </th>
+                <th scope="col" className="text-center">
+                  Employee Name
+                </th>
+                <th scope="col" className="text-center">
+                  Email
+                </th>
+                <th scope="col" className="text-center">
+                  Joining Date
+                </th>
                 {/* <th scope="col" className="text-center">Action</th> */}
               </tr>
             </thead>
