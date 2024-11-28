@@ -122,6 +122,10 @@
  color: #fff !important;
 }
 
+.btnPdf:focus{
+  box-shadow: none !important;
+}
+
 .btnPdf img{
   width: 20px;
 }
@@ -130,6 +134,10 @@
   background-color: #008337 !important;
   border: none !important;
   color: #fff !important;
+}
+
+.btnExcel:focus{
+  box-shadow: none !important;
 }
 
 .btnExcel img{

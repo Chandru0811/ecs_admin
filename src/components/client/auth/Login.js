@@ -108,7 +108,7 @@ function Login({ handleLogin }) {
                         <FaLock />
                       </span>
                       <input
-                        type={passwordVisible ? "text" : "password"} // Toggle password visibility
+                        type={passwordVisible ? "text" : "password"}
                         className="form-control"
                         id="password"
                         placeholder="Password"

@@ -12,6 +12,8 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
   const [show, setShow] = useState(false);
   const [exportAs, setExportAs] = useState("");
   const today = new Date().toISOString().split("T")[0];
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [excelLoading, setExcelLoading] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -58,6 +60,9 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setPdfLoading(exportAs === "pdf");
+        setExcelLoading(exportAs === "xls");
+        
         const response = await api.post("admin/filter/attendance", values);
         if (response.status === 200) {
           toast.success(response.data.message);
@@ -71,7 +76,7 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
             exportToExcel(
               response.data.data,
               `Attendance Report From ${values.fromdate} to ${values.todate}`,
-              `${values.fromdate}-${values.todate}`
+              `${values.fromdate} to ${values.todate}`
             );
           }
           handleClose();
@@ -80,6 +85,9 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
         }
       } catch (error) {
         toast.error("Error occurred while exporting");
+      } finally {
+        setPdfLoading(false);
+        setExcelLoading(false);
       }
     },
   });
@@ -97,7 +105,7 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div className=" col-12 mb-3">
+              <div className="col-12 mb-3">
                 <label className="form-label">Employee</label>
                 <select
                   name="empId"
@@ -171,7 +179,14 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
                 setExportAs("pdf");
                 formik.handleSubmit();
               }}
+              disabled={pdfLoading}
             >
+              {pdfLoading && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               <img src={pdf} alt="PDF" className="img-fluid me-2" />
               Download PDF
             </Button>
@@ -182,7 +197,14 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
                 setExportAs("xls");
                 formik.handleSubmit();
               }}
+              disabled={excelLoading}
             >
+              {excelLoading && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               <img src={excel} alt="Excel" className="img-fluid me-2" />
               Download Excel
             </Button>

@@ -227,6 +227,9 @@ const Attendance = () => {
                       Check Out
                     </th>
                     <th scope="col" className="text-center">
+                      Working Mode
+                    </th>
+                    <th scope="col" className="text-center">
                       Action
                     </th>
                   </tr>
@@ -243,6 +246,7 @@ const Attendance = () => {
                       <td className="text-center">
                         {formatTimeTo12Hour(data.checkout)}
                       </td>
+                      <td className="text-center">{data.work_mode}</td>
                       <td className="text-center">
                         <div>
                           <Link

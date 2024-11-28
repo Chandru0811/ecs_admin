@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Link,
   useNavigate,
@@ -17,6 +17,7 @@ function AttendanceEdit() {
   const checkin = searchParams.get("checkin");
   const checkout = searchParams.get("checkout");
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const validationSchema = Yup.object().shape({
     checkin: Yup.string().required("*Check In is required"),
@@ -33,6 +34,7 @@ function AttendanceEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoadIndicator(true);
         const response = await api.post("admin/update/attendance", values);
         if (response.status === 200) {
           toast.success(response.data.message);
@@ -42,6 +44,8 @@ function AttendanceEdit() {
         }
       } catch (e) {
         toast.error("Error Occurs");
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -67,7 +71,13 @@ function AttendanceEdit() {
                       <span>Back</span>
                     </button>
                   </Link>
-                  <button type="submit" className="btn btn-sm btn-button">
+                  <button type="submit" className="btn btn-sm btn-button" disabled={loadIndicator} >
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                     <span>Update</span>
                   </button>
                 </div>
