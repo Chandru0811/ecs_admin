@@ -34,11 +34,21 @@ const Attendance = () => {
       "Employee Name": item.user.name,
       "Check In": formatTimeTo12Hour(item.checkin),
       "Check Out": formatTimeTo12Hour(item.checkout),
+      "Working Mode": item.work_mode,
     }));
 
     const worksheet = XLSX.utils.aoa_to_sheet([
       ...headingRow,
-      ...[["S.NO", "Employee ID", "Employee Name", "Check In", "Check Out"]],
+      ...[
+        [
+          "S.NO",
+          "Employee ID",
+          "Employee Name",
+          "Check In",
+          "Check Out",
+          "Working Mode",
+        ],
+      ],
       ...dataRows.map((row) => Object.values(row)),
     ]);
 
@@ -75,13 +85,23 @@ const Attendance = () => {
     doc.text(heading, headingX, 10);
 
     doc.autoTable({
-      head: [["S.NO", "Employee ID", "Employee Name", "Check In", "Check Out"]],
+      head: [
+        [
+          "S.NO",
+          "Employee ID",
+          "Employee Name",
+          "Check In",
+          "Check Out",
+          "Working Mode",
+        ],
+      ],
       body: data.map((item, index) => [
         index + 1,
         item.user.emp_id,
         item.user.name,
         formatTimeTo12Hour(item.checkin),
         formatTimeTo12Hour(item.checkout),
+        item.work_mode
       ]),
     });
 
@@ -162,10 +182,10 @@ const Attendance = () => {
           </div>
         ) : (
           <>
-            <div className="container-fluid row py-4">
-              <div className="col-md-8 col-12 mb-3">
+            <div className="d-flex flex-wrap justify-content-between px-2 py-3">
+              <div className="Button mb-3">
                 <button
-                  className="btn btn-sm btnDownload"
+                  className="btn btn-sm btn-light "
                   onClick={() =>
                     exportToExcel(
                       datas,
@@ -177,7 +197,7 @@ const Attendance = () => {
                   Excel
                 </button>
                 <button
-                  className="btn btn-sm btnDownload mx-3"
+                  className="btn btn-sm btn-light  mx-3"
                   onClick={() =>
                     exportToPDF(
                       datas,
@@ -193,9 +213,10 @@ const Attendance = () => {
                   exportToExcel={exportToExcel}
                 />
               </div>
-              <div className="col-md-4 col-12">
+              <div className="Input ps-2">
                 <input
                   type="date"
+                  style={{ width: "250px" }}
                   className="form-control"
                   value={selectedDate}
                   max={new Date().toISOString().split("T")[0]}

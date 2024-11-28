@@ -59,8 +59,11 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
       try {
         setPdfLoading(exportAs === "pdf");
         setExcelLoading(exportAs === "xls");
-        
-        const response = await api.post("admin/filter/attendance", values);
+        const queryParams = new URLSearchParams(values).toString();
+
+        const response = await api.get(
+          `admin/filter/attendance?${queryParams}`
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           if (exportAs === "pdf") {
@@ -91,7 +94,7 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
 
   return (
     <>
-      <button className="btn btn-sm btndwnld" onClick={handleShow}>
+      <button className="btn btn-sm btn-light " onClick={handleShow}>
         <GrDownload />
       </button>
 
