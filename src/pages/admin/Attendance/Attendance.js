@@ -27,7 +27,7 @@ const Attendance = () => {
 
   const exportToExcel = (data, heading, filename) => {
     const headingRow = [[heading]];
-  
+
     const dataRows = data.map((item, index) => ({
       "S.NO": index + 1,
       "Employee ID": item.user.emp_id,
@@ -35,20 +35,20 @@ const Attendance = () => {
       "Check In": formatTimeTo12Hour(item.checkin),
       "Check Out": formatTimeTo12Hour(item.checkout),
     }));
-  
+
     const worksheet = XLSX.utils.aoa_to_sheet([
       ...headingRow,
       ...[["S.NO", "Employee ID", "Employee Name", "Check In", "Check Out"]],
-      ...dataRows.map(row => Object.values(row)),
+      ...dataRows.map((row) => Object.values(row)),
     ]);
-  
+
     worksheet["!merges"] = [
       {
         s: { r: 0, c: 0 },
         e: { r: 0, c: 4 },
       },
     ];
-  
+
     const columnWidths = [
       { wch: 5 },
       { wch: 15 },
@@ -57,21 +57,23 @@ const Attendance = () => {
       { wch: 10 },
     ];
     worksheet["!cols"] = columnWidths;
-  
+
     const workbook = XLSX.utils.book_new();
+
     XLSX.utils.book_append_sheet(workbook, worksheet, filename);
+
     XLSX.writeFile(workbook, `${filename}.xlsx`);
   };
 
   const exportToPDF = (data, heading, filename) => {
     const doc = new jsPDF();
-    
+
     const pageWidth = doc.internal.pageSize.width;
     const headingWidth = doc.getTextWidth(heading);
     const headingX = (pageWidth - headingWidth) / 2;
-  
+
     doc.text(heading, headingX, 10);
-  
+
     doc.autoTable({
       head: [["S.NO", "Employee ID", "Employee Name", "Check In", "Check Out"]],
       body: data.map((item, index) => [
@@ -82,10 +84,10 @@ const Attendance = () => {
         formatTimeTo12Hour(item.checkout),
       ]),
     });
-  
+
     doc.save(`${filename}.pdf`);
   };
-  
+
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       return;

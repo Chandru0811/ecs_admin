@@ -7,7 +7,6 @@ import api from "../../../config/URL";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
   const [show, setShow] = useState(false);
@@ -22,7 +21,6 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
 
   const handleShow = () => setShow(true);
   const [loading, setLoading] = useState(true);
-  console.log(loading);
   const [employeeData, setEmployeeData] = useState([]);
 
   const fetchData = async () => {
@@ -73,7 +71,7 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
             exportToExcel(
               response.data.data,
               `Attendance Report From ${values.fromdate} to ${values.todate}`,
-              `Attendance_${values.fromdate}_to_${values.todate}`
+              `${values.fromdate}-${values.todate}`
             );
           }
           handleClose();
