@@ -12,3 +12,126 @@
   --admin-background-color: #ad8c5c;
   --admin-text-color: #fff;
 }
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 69vh;
+}
+
+.loader {
+  --path: #2f3545;
+  --dot: #5628ee;
+  --duration: 3s;
+  width: 44px;
+  height: 44px;
+  position: relative;
+}
+
+.loader:before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  position: absolute;
+  display: block;
+  background: var(--dot);
+  top: 37px;
+  left: 19px;
+  transform: translate(-18px, -18px);
+  animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
+}
+
+.loader svg circle {
+  fill: none;
+  stroke: var(--path);
+  stroke-width: 10px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 150 50 150 50;
+  stroke-dashoffset: 75;
+  animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
+}
+
+@keyframes dotRect {
+  25% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(18px, -18px);
+  }
+
+  75% {
+    transform: translate(0, -36px);
+  }
+
+  100% {
+    transform: translate(-18px, -18px);
+  }
+}
+
+@keyframes pathCircle {
+  25% {
+    stroke-dashoffset: 125;
+  }
+
+  50% {
+    stroke-dashoffset: 175;
+  }
+
+  75% {
+    stroke-dashoffset: 225;
+  }
+
+  100% {
+    stroke-dashoffset: 275;
+  }
+}
+
+.btnDownload{
+  border: 1px solid #0000004d !important;
+  background: linear-gradient(to bottom, #e6e6e61a 0%, #0000001a 100%);
+  border-radius: 0px !important; 
+  color: #333 !important;
+}
+
+.btnDownload:focus{
+  box-shadow: none !important;
+}
+
+.btndwnld{
+  border: 1px solid #0000004d !important;
+  background: linear-gradient(to bottom, #e6e6e61a 0%, #0000001a 100%);
+  border-radius: 0px !important; 
+  color: #333 !important;
+  font-size: 18px !important;
+  padding: 4.75px 12px !important;
+}
+
+.btndwnld:focus{
+  box-shadow: none !important;
+}
+
+.btnPdf{
+ background-color: #f40f02 !important;
+ border: none !important;
+ color: #fff !important;
+}
+
+.btnPdf img{
+  width: 20px;
+}
+
+.btnExcel{
+  background-color: #008337 !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+.btnExcel img{
+  width: 20px;
+}

@@ -5,15 +5,15 @@ import * as Yup from "yup";
 
 function AttendanceEdit() {
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required("*Employee Name is required"),
         checkIn: Yup.string().required("*Check In is required"),
+        working_mode: Yup.string().required("*Select a Working Mode"),
     });
 
     const formik = useFormik({
         initialValues: {
-            name: "Ragul",
             checkIn: "10:00",
-            checkOut: ""
+            checkOut: "",
+            working_mode: "Work from office"
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -51,28 +51,6 @@ function AttendanceEdit() {
                     <div className='container py-5'>
                         <div className='row py-3'>
                             <div className='col-md-6 col-12 mb-3'>
-                                <label className='form-label'>Employee Name<span className="text-danger">*</span></label>
-                                <select
-                                    name="name"
-                                    {...formik.getFieldProps("name")}
-                                    className={`form-select    ${formik.touched.name && formik.errors.name
-                                            ? "is-invalid"
-                                            : ""
-                                        }`}
-                                >
-                                    <option selected></option>
-                                    <option value="Ragul">Ragul</option>
-                                    <option value="Sakthivel">Sakthivel</option>
-                                    <option value="Prem">Prem</option>
-                                </select>
-                                {formik.touched.name &&
-                                    formik.errors.name && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.name}
-                                        </div>
-                                    )}
-                            </div>
-                            <div className='col-md-6 col-12 mb-3'>
                                 <label className='form-label'>Check In<span className="text-danger">*</span></label>
                                 <input type='time'
                                     name="checkIn"
@@ -96,6 +74,27 @@ function AttendanceEdit() {
                                     className={`form-control`}
                                     {...formik.getFieldProps("checkOut")}
                                 />
+                            </div>
+                            <div className='col-md-6 col-12 mb-3'>
+                                <label className='form-label'>Working Mode<span className="text-danger">*</span></label>
+                                <select
+                                    name="name"
+                                    {...formik.getFieldProps("working_mode")}
+                                    className={`form-select    ${formik.touched.working_mode && formik.errors.working_mode
+                                            ? "is-invalid"
+                                            : ""
+                                        }`}
+                                >
+                                    <option selected></option>
+                                    <option value="Work from office">Work from office</option>
+                                    <option value="Work from office">Work from home</option>
+                                </select>
+                                {formik.touched.working_mode &&
+                                    formik.errors.working_mode && (
+                                        <div className="invalid-feedback">
+                                            {formik.errors.working_mode}
+                                        </div>
+                                    )}
                             </div>
                         </div>
                     </div>

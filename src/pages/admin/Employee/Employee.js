@@ -97,41 +97,50 @@ const Employee = () => {
         className="card shadow border-0 mt-2"
         style={{ minHeight: "69vh", borderRadius: "0px" }}
       >
-        <div className="table-responsive p-2 minHeight">
-          <table ref={tableRef} className="display table ">
-            <thead className="thead-light">
-              <tr>
-                <th
-                  scope="col"
-                  className="text-center"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  S.NO
-                </th>
-                <th scope="col" className="text-center">
-                  Employee ID
-                </th>
-                <th scope="col" className="text-center">
-                  Employee Name
-                </th>
-                <th scope="col" className="text-center">
-                  Email
-                </th>
-                <th scope="col" className="text-center">
-                  Joining Date
-                </th>
-                {/* <th scope="col" className="text-center">Action</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {datas?.map((data, index) => (
-                <tr key={index}>
-                  <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{data.emp_id}</td>
-                  <td className="text-center">{data.name}</td>
-                  <td className="text-center">{data.email}</td>
-                  <td className="text-center">{data.join_date}</td>
-                  {/* <td className="text-center">
+        {loading ? (
+          <div className="loader-container">
+            <div className="loader">
+              <svg viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32"></circle>
+              </svg>
+            </div>
+          </div>
+        ) : (
+          <div className="table-responsive p-2 minHeight">
+            <table ref={tableRef} className="display table ">
+              <thead className="thead-light">
+                <tr>
+                  <th
+                    scope="col"
+                    className="text-center"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    S.NO
+                  </th>
+                  <th scope="col" className="text-center">
+                    Employee ID
+                  </th>
+                  <th scope="col" className="text-center">
+                    Employee Name
+                  </th>
+                  <th scope="col" className="text-center">
+                    Email
+                  </th>
+                  <th scope="col" className="text-center">
+                    Joining Date
+                  </th>
+                  {/* <th scope="col" className="text-center">Action</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {datas?.map((data, index) => (
+                  <tr key={index}>
+                    <td className="text-center">{index + 1}</td>
+                    <td className="text-center">{data.emp_id}</td>
+                    <td className="text-center">{data.name}</td>
+                    <td className="text-center">{data.email}</td>
+                    <td className="text-center">{data.join_date}</td>
+                    {/* <td className="text-center">
                     <div>
                       <Link to="/employee/view">
                         <button className="btn btn-sm ps-0 shadow-none border-none">
@@ -146,11 +155,12 @@ const Employee = () => {
                       <DeleteModel />
                     </div>
                   </td> */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );

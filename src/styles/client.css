@@ -82,7 +82,8 @@ input:-webkit-autofill:hover {
 }
 
 .login_submit:hover,
-.login_submit.active {
+.login_submit.active,
+.login_submit:disabled {
   background-color: #fff !important;
   color: #116ffcdf !important;
   border: 2px solid #116ffcdf !important;

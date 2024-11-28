@@ -11,7 +11,8 @@ import { FiAlertTriangle } from "react-icons/fi";
 
 function Login({ handleLogin }) {
   const navigate = useNavigate();
-  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const validationSchema = Yup.object().shape({
     emp_id: Yup.string().required("*Employee ID is required"),
@@ -26,6 +27,7 @@ function Login({ handleLogin }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoadIndicator(true);
         const response = await api.post(`emp/login`, values);
         if (response.status === 200) {
           const { token, userDetails } = response.data.data;
@@ -53,11 +55,12 @@ function Login({ handleLogin }) {
           console.error("API Error", error);
           toast.error("An unexpected error occurred.");
         }
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setPasswordVisible((prev) => !prev);
   };
@@ -86,11 +89,10 @@ function Login({ handleLogin }) {
                         name="emp_id"
                         placeholder="Employee ID"
                         aria-label="Employee ID"
-                        className={`form-control ${
-                          formik.touched.emp_id && formik.errors.emp_id
+                        className={`form-control ${formik.touched.emp_id && formik.errors.emp_id
                             ? "is-invalid"
                             : ""
-                        }`}
+                          }`}
                         {...formik.getFieldProps("emp_id")}
                       />
                     </div>
@@ -130,7 +132,14 @@ function Login({ handleLogin }) {
                     )}
                   </div>
                   <div className="text-center pt-5 pb-3">
-                    <button type="submit" className="btn w-100 login_submit">
+                    <button type="submit" className="btn w-100 login_submit"
+                      disabled={loadIndicator} >
+                      {loadIndicator && (
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          aria-hidden="true"
+                        ></span>
+                      )}
                       Login
                     </button>
                   </div>
