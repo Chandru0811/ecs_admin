@@ -44,7 +44,7 @@ function Login({ handleLogin }) {
           }
         }
       } catch (error) {
-        if (error.response.status === 400) {
+        if (error.response.status === 422) {
           const errorMessage = error.response.data.message;
           if (errorMessage) {
             toast(errorMessage, {
