@@ -22,18 +22,15 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
   };
 
   const handleShow = () => setShow(true);
-  const [loading, setLoading] = useState(true);
   const [employeeData, setEmployeeData] = useState([]);
 
   const fetchData = async () => {
-    setLoading(true);
     try {
       const response = await api.get("admin/allEmps");
       setEmployeeData(response.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
