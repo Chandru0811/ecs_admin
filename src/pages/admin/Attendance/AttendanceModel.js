@@ -23,7 +23,6 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
   const handleShow = () => setShow(true);
   const [loading, setLoading] = useState(true);
   console.log(loading);
-  const navigate = useNavigate();
   const [employeeData, setEmployeeData] = useState([]);
 
   const fetchData = async () => {
@@ -77,7 +76,7 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
               `Attendance_${values.fromdate}_to_${values.todate}`
             );
           }
-          navigate("/attendance");
+          handleClose();
         } else {
           toast.error(response.data.message);
         }
