@@ -59,11 +59,8 @@ const Attendance = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await api.post(
+        const response = await api.get(
           `admin/allEmpAttendance?date=${selectedDate}`,
-          {
-            date: selectedDate,
-          }
         );
         setDatas(response.data.data);
       } catch (error) {
@@ -86,9 +83,9 @@ const Attendance = () => {
     return `${hour12}:${minute} ${period}`;
   }
 
-  const exportToExcel = () => {
+  const exportToExcel = (excelData) => {
     const worksheet = XLSX.utils.json_to_sheet(
-      datas.map((data, index) => ({
+      excelData.map((data, index) => ({
         "S.NO": index + 1,
         "Employee ID": data.emp_id,
         "Employee Name": data.name,
@@ -101,13 +98,13 @@ const Attendance = () => {
     XLSX.writeFile(workbook, `Attendance_${selectedDate}.xlsx`);
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = (pdfData) => {
     const doc = new jsPDF();
     doc.text("Attendance", 20, 10);
 
     doc.autoTable({
       head: [["S.NO", "Employee ID", "Employee Name", "Check In", "Check Out"]],
-      body: datas.map((data, index) => [
+      body: pdfData.map((data, index) => [
         index + 1,
         data.emp_id,
         data.name,
@@ -162,11 +159,14 @@ const Attendance = () => {
               <div className="col-md-8 col-12 mb-3">
                 <button
                   className="btn btn-sm btnDownload"
-                  onClick={exportToExcel}
+                  onClick={() => exportToExcel(datas)}
                 >
                   Excel
                 </button>
-                <button className="btn btn-sm btnDownload mx-3" onClick={exportToPDF}>
+                <button
+                  className="btn btn-sm btnDownload mx-3"
+                  onClick={() => exportToPDF(datas)}
+                >
                   PDF
                 </button>
                 <AttendanceModel />
@@ -185,7 +185,11 @@ const Attendance = () => {
               <table ref={tableRef} className="display table">
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
+                    <th
+                      scope="col"
+                      className="text-center"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
                       S.NO
                     </th>
                     <th scope="col" className="text-center">
@@ -200,7 +204,9 @@ const Attendance = () => {
                     <th scope="col" className="text-center">
                       Check Out
                     </th>
-                    <th scope="col" className="text-center">Action</th>
+                    <th scope="col" className="text-center">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
