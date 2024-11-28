@@ -38,7 +38,7 @@ function Admin({ handleLogout }) {
                   {/* Attendance */}
                   <Route path="/attendance" element={<Attendance />} />
                   <Route path="/attendance/add" element={<AttendanceAdd />} />
-                  <Route path="/attendance/edit/:emp_id/:work_mode/:checkin/:checkout" element={<AttendanceEdit />} />
+                  <Route path="/attendance/edit/:id" element={<AttendanceEdit />} />
                   <Route path="/attendance/view" element={<AttendanceView />} />
                 </Routes>
               </div>

@@ -119,7 +119,10 @@ const Attendance = () => {
 
   return (
     <section className="mx-2">
-      <div className="card shadow border-0 mb-2" style={{ borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mb-2"
+        style={{ borderRadius: "0px" }}
+      >
         <div className="container-fluid py-4">
           <div className="row align-items-center justify-content-between">
             <div className="col">
@@ -130,7 +133,10 @@ const Attendance = () => {
           </div>
         </div>
       </div>
-      <div className="card shadow border-0 mt-2" style={{ minHeight: "69vh", borderRadius: "0px" }}>
+      <div
+        className="card shadow border-0 mt-2"
+        style={{ minHeight: "69vh", borderRadius: "0px" }}
+      >
         {loading ? (
           <div className="loader-container">
             <div className="loader">
@@ -145,17 +151,32 @@ const Attendance = () => {
               <div className="col-md-8 col-12 mb-3">
                 <button
                   className="btn btn-sm btnDownload"
-                  onClick={() => exportToExcel(datas, `Attendance Report for ${selectedDate}`, `Attendance_${selectedDate}`)}
+                  onClick={() =>
+                    exportToExcel(
+                      datas,
+                      `Attendance Report for ${selectedDate}`,
+                      `Attendance_${selectedDate}`
+                    )
+                  }
                 >
                   Excel
                 </button>
                 <button
                   className="btn btn-sm btnDownload mx-3"
-                  onClick={() => exportToPDF(datas, `Attendance Report for ${selectedDate}`, `Attendance_${selectedDate}`)}
+                  onClick={() =>
+                    exportToPDF(
+                      datas,
+                      `Attendance Report for ${selectedDate}`,
+                      `Attendance_${selectedDate}`
+                    )
+                  }
                 >
                   PDF
                 </button>
-                <AttendanceModel />
+                <AttendanceModel
+                  exportToPDF={exportToPDF}
+                  exportToExcel={exportToExcel}
+                />
               </div>
               <div className="col-md-4 col-12">
                 <input
@@ -171,7 +192,11 @@ const Attendance = () => {
               <table ref={tableRef} className="display table">
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
+                    <th
+                      scope="col"
+                      className="text-center"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
                       S.NO
                     </th>
                     <th scope="col" className="text-center">
@@ -197,11 +222,17 @@ const Attendance = () => {
                       <td className="text-center">{index + 1}</td>
                       <td className="text-center">{data.user.emp_id}</td>
                       <td className="text-center">{data.user.name}</td>
-                      <td className="text-center">{formatTimeTo12Hour(data.checkin)}</td>
-                      <td className="text-center">{formatTimeTo12Hour(data.checkout)}</td>
+                      <td className="text-center">
+                        {formatTimeTo12Hour(data.checkin)}
+                      </td>
+                      <td className="text-center">
+                        {formatTimeTo12Hour(data.checkout)}
+                      </td>
                       <td className="text-center">
                         <div>
-                          <Link to={`/attendance/edit/${data.user.emp_id}/${data.work_mode}/${data.checkin}/${data.checkout}`}>
+                          <Link
+                            to={`/attendance/edit/${data.id}?work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}`}
+                          >
                             <button className="btn btn-sm shadow-none border-none">
                               <FaRegEdit />
                             </button>
