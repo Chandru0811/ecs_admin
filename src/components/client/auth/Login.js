@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import LoginImage from "../../../assets/login_image.png";
+import LoginImage from "../../../assets/login_image.webp";
 import Logo from "../../../assets/logo.webp";
 import { useFormik } from "formik";
 import * as Yup from "yup";
