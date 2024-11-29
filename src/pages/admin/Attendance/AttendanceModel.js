@@ -65,7 +65,6 @@ const AttendanceModel = ({ exportToPDF, exportToExcel }) => {
           `admin/filter/attendance?${queryParams}`
         );
         if (response.status === 200) {
-          toast.success(response.data.message);
           if (exportAs === "pdf") {
             exportToPDF(
               response.data.data,

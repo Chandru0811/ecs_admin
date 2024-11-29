@@ -9,6 +9,7 @@ import AttendanceModel from "../Attendance/AttendanceModel";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import toast from "react-hot-toast";
 
 const Attendance = () => {
   const tableRef = useRef(null);
@@ -26,6 +27,11 @@ const Attendance = () => {
   };
 
   const exportToExcel = (data, heading, filename) => {
+    if (data.length === 0) {
+      toast.error("There are no records available to download as an Excel file.");
+      return;
+    }
+
     const headingRow = [[heading]];
 
     const dataRows = data.map((item, index) => ({
@@ -55,7 +61,7 @@ const Attendance = () => {
     worksheet["!merges"] = [
       {
         s: { r: 0, c: 0 },
-        e: { r: 0, c: 4 },
+        e: { r: 0, c: 5 },
       },
     ];
 
@@ -65,6 +71,7 @@ const Attendance = () => {
       { wch: 20 },
       { wch: 10 },
       { wch: 10 },
+      { wch: 20 }
     ];
     worksheet["!cols"] = columnWidths;
 
@@ -73,9 +80,16 @@ const Attendance = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, filename);
 
     XLSX.writeFile(workbook, `${filename}.xlsx`);
+
+    toast.success("Excel File Downloaded Successfully!");
   };
 
   const exportToPDF = (data, heading, filename) => {
+    if (data.length === 0) {
+      toast.error("There are no records available to download as a PDF.");
+      return;
+    }
+
     const doc = new jsPDF();
 
     const pageWidth = doc.internal.pageSize.width;
@@ -106,6 +120,8 @@ const Attendance = () => {
     });
 
     doc.save(`${filename}.pdf`);
+
+    toast.success("PDF File Downloaded Successfully!");
   };
 
   const initializeDataTable = () => {
