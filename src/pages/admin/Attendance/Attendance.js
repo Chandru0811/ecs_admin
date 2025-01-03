@@ -4,7 +4,7 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import api from "../../../config/URL";
 import { Link } from "react-router-dom";
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaPlus } from "react-icons/fa";
 import AttendanceModel from "../Attendance/AttendanceModel";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
@@ -36,11 +36,13 @@ const Attendance = () => {
 
     const dataRows = data.map((item, index) => ({
       "S.NO": index + 1,
+      "Date": item.date,
       "Employee ID": item.user.emp_id,
       "Employee Name": item.user.name,
       "Check In": formatTimeTo12Hour(item.checkin),
       "Check Out": formatTimeTo12Hour(item.checkout),
       "Working Mode": item.work_mode,
+      "Work Log": item.work_log
     }));
 
     const worksheet = XLSX.utils.aoa_to_sheet([
@@ -48,11 +50,13 @@ const Attendance = () => {
       ...[
         [
           "S.NO",
+          "Date",
           "Employee ID",
           "Employee Name",
           "Check In",
           "Check Out",
           "Working Mode",
+          "Work Log"
         ],
       ],
       ...dataRows.map((row) => Object.values(row)),
@@ -61,17 +65,19 @@ const Attendance = () => {
     worksheet["!merges"] = [
       {
         s: { r: 0, c: 0 },
-        e: { r: 0, c: 5 },
+        e: { r: 0, c: 7 },
       },
     ];
 
     const columnWidths = [
       { wch: 5 },
+      { wch: 10 },
       { wch: 15 },
       { wch: 20 },
       { wch: 10 },
       { wch: 10 },
-      { wch: 20 }
+      { wch: 20 },
+      { wch: 50 }
     ];
     worksheet["!cols"] = columnWidths;
 
@@ -102,15 +108,17 @@ const Attendance = () => {
       head: [
         [
           "S.NO",
+          "Date",
           "Employee ID",
           "Employee Name",
           "Check In",
           "Check Out",
-          "Working Mode",
+          "Working Mode"
         ],
       ],
       body: data.map((item, index) => [
         index + 1,
+        item.date,
         item.user.emp_id,
         item.user.name,
         formatTimeTo12Hour(item.checkin),
@@ -177,8 +185,13 @@ const Attendance = () => {
         <div className="container-fluid py-4">
           <div className="row align-items-center justify-content-between">
             <div className="col">
-              <div className="d-flex align-items-center gap-4">
+              <div className="d-flex align-items-center justify-content-between">
                 <h1 className="h4 ls-tight fw-semibold">Attendance</h1>
+                <Link to='/attendance/add'>
+                  <button type="button" className="btn btn-button">
+                    Add <FaPlus size={10} className="mb-1" />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -267,6 +280,9 @@ const Attendance = () => {
                       Working Mode
                     </th>
                     <th scope="col" className="text-center">
+                      Work Log
+                    </th>
+                    <th scope="col" className="text-center">
                       Action
                     </th>
                   </tr>
@@ -284,10 +300,11 @@ const Attendance = () => {
                         {formatTimeTo12Hour(data.checkout)}
                       </td>
                       <td className="text-center">{data.work_mode}</td>
+                      <td className="text-center">-</td>
                       <td className="text-center">
                         <div>
                           <Link
-                            to={`/attendance/edit/${data.id}?work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}`}
+                            to={`/attendance/edit/${data.id}?work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}&work_log=${data.work_log}`}
                           >
                             <button className="btn btn-sm shadow-none border-none">
                               <FaRegEdit />

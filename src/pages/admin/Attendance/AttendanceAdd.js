@@ -1,25 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../../../config/URL";
 
 function AttendanceAdd() {
+    const [datas, setDatas] = useState([]);
+
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required("*Employee Name is required"),
+        emp_id: Yup.string().required("*Employee Name is required"),
         checkIn: Yup.string().required("*Check In is required"),
+        work_mode: Yup.string().required("*Select a Working Mode")
     });
 
     const formik = useFormik({
         initialValues: {
-            name: "",
+            emp_id: "",
             checkIn: "",
-            checkOut: ""
+            checkOut: "",
+            work_mode: "",
+            work_log: ""
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             console.log("Attendance Datas:", values);
         },
     });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await api.get("admin/allEmps");
+                setDatas(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <section className='mx-2'>
@@ -53,22 +72,26 @@ function AttendanceAdd() {
                             <div className='col-md-6 col-12 mb-3'>
                                 <label className='form-label'>Employee Name<span className="text-danger">*</span></label>
                                 <select
-                                    name="name"
-                                    {...formik.getFieldProps("name")}
-                                    className={`form-select    ${formik.touched.name && formik.errors.name
-                                            ? "is-invalid"
-                                            : ""
+                                    name="emp_id"
+                                    aria-label="Default select example"
+                                    {...formik.getFieldProps("emp_id")}
+                                    className={`form-select ${formik.touched.emp_id && formik.errors.emp_id
+                                        ? "is-invalid"
+                                        : ""
                                         }`}
                                 >
                                     <option selected></option>
-                                    <option value="Ragul">Ragul</option>
-                                    <option value="Sakthivel">Sakthivel</option>
-                                    <option value="Prem">Prem</option>
+                                    {datas &&
+                                        datas.map((employee) => (
+                                            <option key={employee.id} value={employee.id}>
+                                                {employee.name}
+                                            </option>
+                                        ))}
                                 </select>
-                                {formik.touched.name &&
-                                    formik.errors.name && (
+                                {formik.touched.emp_id &&
+                                    formik.errors.emp_id && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.name}
+                                            {formik.errors.emp_id}
                                         </div>
                                     )}
                             </div>
@@ -95,6 +118,39 @@ function AttendanceAdd() {
                                     name="checkOut"
                                     className={`form-control`}
                                     {...formik.getFieldProps("checkOut")}
+                                />
+                            </div>
+                            <div className="col-md-6 col-12 mb-3">
+                                <label className="form-label">
+                                    Working Mode<span className="text-danger">*</span>
+                                </label>
+                                <select
+                                    name="work_mode"
+                                    {...formik.getFieldProps("work_mode")}
+                                    className={`form-select ${formik.touched.work_mode && formik.errors.work_mode
+                                        ? "is-invalid"
+                                        : ""
+                                        }`}
+                                >
+                                    <option selected></option>
+                                    <option value="Work From Office">Work From Office</option>
+                                    <option value="Work From Home">Work From Home</option>
+                                </select>
+                                {formik.touched.work_mode && formik.errors.work_mode && (
+                                    <div className="invalid-feedback">
+                                        {formik.errors.work_mode}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="col-md-6 col-12 mb-3">
+                                <label className="form-label">
+                                    Work Log
+                                </label>
+                                <textarea
+                                    rows="3"
+                                    className="form-control"
+                                    name="work_log"
+                                    {...formik.getFieldProps("work_log")}
                                 />
                             </div>
                         </div>

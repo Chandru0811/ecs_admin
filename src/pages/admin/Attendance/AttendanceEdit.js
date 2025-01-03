@@ -16,6 +16,7 @@ function AttendanceEdit() {
   const work_mode = searchParams.get("work_mode");
   const checkin = searchParams.get("checkin");
   const checkout = searchParams.get("checkout");
+  const work_log = searchParams.get("work_log");
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -30,6 +31,7 @@ function AttendanceEdit() {
       checkin: checkin,
       checkout: checkout,
       work_mode: work_mode,
+      work_log: work_log
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -72,12 +74,12 @@ function AttendanceEdit() {
                     </button>
                   </Link>
                   <button type="submit" className="btn btn-sm btn-button" disabled={loadIndicator} >
-                      {loadIndicator && (
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          aria-hidden="true"
-                        ></span>
-                      )}
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     <span>Update</span>
                   </button>
                 </div>
@@ -98,11 +100,10 @@ function AttendanceEdit() {
                 <input
                   type="time"
                   name="checkin"
-                  className={`form-control ${
-                    formik.touched.checkin && formik.errors.checkin
+                  className={`form-control ${formik.touched.checkin && formik.errors.checkin
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("checkin")}
                 />
                 {formik.touched.checkin && formik.errors.checkin && (
@@ -127,11 +128,10 @@ function AttendanceEdit() {
                 <select
                   name="work_mode"
                   {...formik.getFieldProps("work_mode")}
-                  className={`form-select ${
-                    formik.touched.work_mode && formik.errors.work_mode
+                  className={`form-select ${formik.touched.work_mode && formik.errors.work_mode
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option selected></option>
                   <option value="Work From Office">Work From Office</option>
@@ -142,6 +142,17 @@ function AttendanceEdit() {
                     {formik.errors.work_mode}
                   </div>
                 )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Work Log
+                </label>
+                <textarea
+                  rows="3"
+                  className="form-control"
+                  name="work_log"
+                  {...formik.getFieldProps("work_log")}
+                />
               </div>
             </div>
           </div>
