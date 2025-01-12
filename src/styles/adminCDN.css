@@ -71422,7 +71422,7 @@ a.text-current:hover {
 .btn-button.disabled {
     color: #fff;
     background-color: #181c2e;
-    border-color: #223f95df;
+    border-color: #181c2e;
 }
 
 .btn-button-check:checked+.btn-button,
@@ -71431,6 +71431,6 @@ a.text-current:hover {
 .btn-button:first-child:active,
 :not(.btn-button-check)+.btn-button:active {
     background-color: #181c2e;
-    border-color: #006e8fdc;
+    border-color: #181c2e;
     color: #fff;
 }
