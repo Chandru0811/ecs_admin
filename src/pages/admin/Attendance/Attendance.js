@@ -28,7 +28,9 @@ const Attendance = () => {
 
   const exportToExcel = (data, heading, filename) => {
     if (data.length === 0) {
-      toast.error("There are no records available to download as an Excel file.");
+      toast.error(
+        "There are no records available to download as an Excel file."
+      );
       return;
     }
 
@@ -36,13 +38,13 @@ const Attendance = () => {
 
     const dataRows = data.map((item, index) => ({
       "S.NO": index + 1,
-      "Date": item.date,
+      Date: item.date,
       "Employee ID": item.user.emp_id,
       "Employee Name": item.user.name,
       "Check In": formatTimeTo12Hour(item.checkin),
       "Check Out": formatTimeTo12Hour(item.checkout),
       "Working Mode": item.work_mode,
-      "Work Log": item.work_log
+      "Work Log": item.work_log,
     }));
 
     const worksheet = XLSX.utils.aoa_to_sheet([
@@ -56,7 +58,7 @@ const Attendance = () => {
           "Check In",
           "Check Out",
           "Working Mode",
-          "Work Log"
+          "Work Log",
         ],
       ],
       ...dataRows.map((row) => Object.values(row)),
@@ -77,7 +79,7 @@ const Attendance = () => {
       { wch: 10 },
       { wch: 10 },
       { wch: 20 },
-      { wch: 50 }
+      { wch: 50 },
     ];
     worksheet["!cols"] = columnWidths;
 
@@ -113,7 +115,7 @@ const Attendance = () => {
           "Employee Name",
           "Check In",
           "Check Out",
-          "Working Mode"
+          "Working Mode",
         ],
       ],
       body: data.map((item, index) => [
@@ -123,7 +125,7 @@ const Attendance = () => {
         item.user.name,
         formatTimeTo12Hour(item.checkin),
         formatTimeTo12Hour(item.checkout),
-        item.work_mode
+        item.work_mode,
       ]),
     });
 
@@ -187,11 +189,11 @@ const Attendance = () => {
             <div className="col">
               <div className="d-flex align-items-center justify-content-between">
                 <h1 className="h4 ls-tight fw-semibold">Attendance</h1>
-                <Link to='/attendance/add'>
+                {/* <Link to='/attendance/add'>
                   <button type="button" className="btn btn-button">
                     Add <FaPlus size={10} className="mb-1" />
                   </button>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

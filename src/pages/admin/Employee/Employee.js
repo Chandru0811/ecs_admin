@@ -7,6 +7,9 @@ import $ from "jquery";
 // import { FaRegEdit } from "react-icons/fa";
 // import DeleteModel from "../../../components/admin/DeleteModel";
 import api from "../../../config/URL";
+import { Link } from "react-router-dom";
+import { FaRegEdit } from "react-icons/fa";
+import DeleteModel from "../../../components/admin/DeleteModel";
 
 const Employee = () => {
   const tableRef = useRef(null);
@@ -90,6 +93,15 @@ const Employee = () => {
                 </Link>
               </div>
             </div> */}
+            <div className="col-auto">
+              <div className="hstack gap-2 justify-content-end">
+                <Link to="/employee/add">
+                  <button type="submit" className="btn btn-sm btn-button">
+                    <span>Add +</span>
+                  </button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -129,7 +141,9 @@ const Employee = () => {
                   <th scope="col" className="text-center">
                     Joining Date
                   </th>
-                  {/* <th scope="col" className="text-center">Action</th> */}
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -140,21 +154,21 @@ const Employee = () => {
                     <td className="text-center">{data.name}</td>
                     <td className="text-center">{data.email}</td>
                     <td className="text-center">{data.join_date}</td>
-                    {/* <td className="text-center">
-                    <div>
-                      <Link to="/employee/view">
+                    <td className="text-center">
+                      <div>
+                        {/* <Link to="/employee/view">
                         <button className="btn btn-sm ps-0 shadow-none border-none">
                           <GoEye />
                         </button>
-                      </Link>
-                      <Link to="/employee/edit">
-                        <button className="btn btn-sm shadow-none border-none">
-                          <FaRegEdit />
-                        </button>
-                      </Link>
-                      <DeleteModel />
-                    </div>
-                  </td> */}
+                      </Link> */}
+                        <Link to="/employee/edit">
+                          <button className="btn btn-sm shadow-none border-none">
+                            <FaRegEdit />
+                          </button>
+                        </Link>
+                        <DeleteModel />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
