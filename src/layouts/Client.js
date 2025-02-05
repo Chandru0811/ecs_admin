@@ -14,6 +14,7 @@ function Client({
         <BrowserRouter basename="/admin">
           <Routes>
             <Route path="/" element={<Login handleLogin={handleLogin} />} />
+            <Route path="*" element={<Login handleLogin={handleLogin} />} />
           </Routes>
         </BrowserRouter>
       </div>
