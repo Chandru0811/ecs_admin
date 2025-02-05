@@ -2,10 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-// import { Link } from "react-router-dom";
-// import { GoEye } from "react-icons/go";
-// import { FaRegEdit } from "react-icons/fa";
-// import DeleteModel from "../../../components/admin/DeleteModel";
 import api from "../../../config/URL";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
@@ -40,18 +36,18 @@ const Employee = () => {
     }
   };
 
-  // const refreshData = async () => {
-  //   destroyDataTable();
-  //   setLoading(true);
-  //   try {
-  //     const response = await api.get("admin/employees");
-  //     setDatas(response.data.data);
-  //   } catch (error) {
-  //     console.error("Error refreshing data:", error);
-  //   }
-  //   setLoading(false);
-  //   initializeDataTable();
-  // };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("admin/allEmps");
+      setDatas(response.data.data);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+    initializeDataTable();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +62,7 @@ const Employee = () => {
     };
 
     fetchData();
-    // refreshData();
+    refreshData();
   }, []);
 
   return (
@@ -84,15 +80,6 @@ const Employee = () => {
                 </h1>
               </div>
             </div>
-            {/* <div className="col-auto">
-              <div className="hstack gap-2 justify-content-end">
-                <Link to="/employee/add">
-                  <button type="submit" className="btn btn-sm btn-button">
-                    <span>Add +</span>
-                  </button>
-                </Link>
-              </div>
-            </div> */}
             <div className="col-auto">
               <div className="hstack gap-2 justify-content-end">
                 <Link to="/employee/add">
@@ -156,17 +143,15 @@ const Employee = () => {
                     <td className="text-center">{data.join_date}</td>
                     <td className="text-center">
                       <div>
-                        {/* <Link to="/employee/view">
-                        <button className="btn btn-sm ps-0 shadow-none border-none">
-                          <GoEye />
-                        </button>
-                      </Link> */}
-                        <Link to="/employee/edit">
+                        <Link to={`/employee/edit/${data.id}`}>
                           <button className="btn btn-sm shadow-none border-none">
                             <FaRegEdit />
                           </button>
                         </Link>
-                        <DeleteModel />
+                        <DeleteModel
+                        onSuccess={refreshData}
+                        path={`/admin/emp/delete/${data.id}`}
+                         />
                       </div>
                     </td>
                   </tr>

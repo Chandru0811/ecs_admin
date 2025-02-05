@@ -189,11 +189,6 @@ const Attendance = () => {
             <div className="col">
               <div className="d-flex align-items-center justify-content-between">
                 <h1 className="h4 ls-tight fw-semibold">Attendance</h1>
-                {/* <Link to='/attendance/add'>
-                  <button type="button" className="btn btn-button">
-                    Add <FaPlus size={10} className="mb-1" />
-                  </button>
-                </Link> */}
               </div>
             </div>
           </div>
@@ -302,11 +297,15 @@ const Attendance = () => {
                         {formatTimeTo12Hour(data.checkout)}
                       </td>
                       <td className="text-center">{data.work_mode}</td>
-                      <td className="text-center">-</td>
+                      <td className="text-center">{data.work_log}</td>
                       <td className="text-center">
                         <div>
                           <Link
-                            to={`/attendance/edit/${data.id}?work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}&work_log=${data.work_log}`}
+                            to={
+                              data.id
+                                ? `/attendance/edit/${data.id}?date=${selectedDate}&work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}&work_log=${data.work_log}`
+                                : `/attendance/edit/${data.id}?emp_id=${data.user.id}&date=${selectedDate}&work_mode=${data.work_mode}&checkin=${data.checkin}&checkout=${data.checkout}&work_log=${data.work_log}`
+                            }
                           >
                             <button className="btn btn-sm shadow-none border-none">
                               <FaRegEdit />

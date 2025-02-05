@@ -17,6 +17,8 @@ function AttendanceEdit() {
   const checkin = searchParams.get("checkin");
   const checkout = searchParams.get("checkout");
   const work_log = searchParams.get("work_log");
+  const emp_id = searchParams.get("emp_id");
+  const date = searchParams.get("date");
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -28,16 +30,21 @@ function AttendanceEdit() {
   const formik = useFormik({
     initialValues: {
       id: id,
-      checkin: checkin,
-      checkout: checkout,
-      work_mode: work_mode,
-      work_log: work_log
+      emp_id: emp_id,
+      date: date,
+      checkin: checkin === "null" ? "" : checkin,
+      checkout: checkout === "null" ? "" : checkout,
+      work_mode: work_mode === "null" ? '' : work_mode,
+      work_log: work_log === "null" ? '' : work_log
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         setLoadIndicator(true);
-        const response = await api.post("admin/update/attendance", values);
+        if (values.id === "null") {
+          delete values.id;
+        }
+        const response = await api.post("admin/attendance", values);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/attendance");
@@ -45,7 +52,7 @@ function AttendanceEdit() {
           toast.error(response.data.message);
         }
       } catch (e) {
-        toast.error("Error Occurs");
+        toast.error("Error Occurred");
       } finally {
         setLoadIndicator(false);
       }

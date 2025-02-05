@@ -32,8 +32,7 @@ function Admin({ handleLogout }) {
                   {/* Employeee */}
                   <Route path="/employee" element={<Employee />} />
                   <Route path="/employee/add" element={<EmployeeAdd />} />
-                  <Route path="/employee/edit" element={<EmployeeEdit />} />
-                  <Route path="/employee/view" element={<EmployeeView />} />
+                  <Route path="/employee/edit/:id" element={<EmployeeEdit />} />
 
                   {/* Attendance */}
                   <Route path="/attendance" element={<Attendance />} />

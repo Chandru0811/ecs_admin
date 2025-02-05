@@ -1,34 +1,56 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../../../config/URL";
+import toast from "react-hot-toast";
 
 function EmployeeEdit() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const validationSchema = Yup.object().shape({
-    employeeId: Yup.string().required("*Employee Id is required"),
-    employeeName: Yup.string().required("*Employee Name is required"),
+    name: Yup.string().required("*Employee Name is required"),
     email: Yup.string().email("*Invalid email").required("*Email is required"),
-    joiningDate: Yup.string().required("*Joining Date is required"),
-    password: Yup.string().required("*Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "*Passwords must match")
-      .required("*Confirm Password is required"),
+    join_date: Yup.string().required("*Joining Date is required")
   });
 
   const formik = useFormik({
     initialValues: {
-      employeeId: "",
-      employeeName: "",
+      name: "",
       email: "",
-      joiningDate: "",
-      password: "",
-      confirmPassword: "",
+      join_date: ""
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Employee Data:", values);
+      setLoadIndicator(true);
+      try {
+        const response = await api.put(`admin/emp/update/${id}`, values);
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/employee");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error.message || "An error occurred");
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`admin/emp/${id}`);
+        formik.setValues(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
+    };
+    getData();
+  }, [id]);
 
   return (
     <section className="mx-2">
@@ -49,7 +71,13 @@ function EmployeeEdit() {
                       Back
                     </button>
                   </Link>
-                  <button type="submit" className="btn btn-sm btn-button">
+                  <button type="submit" className="btn btn-sm btn-button" disabled={loadIndicator}>
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     Update
                   </button>
                 </div>
@@ -70,19 +98,11 @@ function EmployeeEdit() {
                 </label>
                 <input
                   type="text"
-                  name="employeeId"
-                  className={`form-control ${
-                    formik.touched.employeeId && formik.errors.employeeId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("employeeId")}
+                  name="emp_id"
+                  className={`form-control`}
+                  {...formik.getFieldProps("emp_id")}
+                  readOnly
                 />
-                {formik.touched.employeeId && formik.errors.employeeId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.employeeId}
-                  </div>
-                )}
               </div>
               {/* Employee Name */}
               <div className="col-md-6 col-12 mb-3">
@@ -91,17 +111,16 @@ function EmployeeEdit() {
                 </label>
                 <input
                   type="text"
-                  name="employeeName"
-                  className={`form-control ${
-                    formik.touched.employeeName && formik.errors.employeeName
+                  name="name"
+                  className={`form-control ${formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
-                  }`}
-                  {...formik.getFieldProps("employeeName")}
+                    }`}
+                  {...formik.getFieldProps("name")}
                 />
-                {formik.touched.employeeName && formik.errors.employeeName && (
+                {formik.touched.name && formik.errors.name && (
                   <div className="invalid-feedback">
-                    {formik.errors.employeeName}
+                    {formik.errors.name}
                   </div>
                 )}
               </div>
@@ -113,11 +132,10 @@ function EmployeeEdit() {
                 <input
                   type="text"
                   name="email"
-                  className={`form-control ${
-                    formik.touched.email && formik.errors.email
+                  className={`form-control ${formik.touched.email && formik.errors.email
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("email")}
                 />
                 {formik.touched.email && formik.errors.email && (
@@ -131,63 +149,18 @@ function EmployeeEdit() {
                 </label>
                 <input
                   type="date"
-                  name="joiningDate"
-                  className={`form-control ${
-                    formik.touched.joiningDate && formik.errors.joiningDate
+                  name="join_date"
+                  className={`form-control ${formik.touched.join_date && formik.errors.join_date
                       ? "is-invalid"
                       : ""
-                  }`}
-                  {...formik.getFieldProps("joiningDate")}
+                    }`}
+                  {...formik.getFieldProps("join_date")}
                 />
-                {formik.touched.joiningDate && formik.errors.joiningDate && (
+                {formik.touched.join_date && formik.errors.join_date && (
                   <div className="invalid-feedback">
-                    {formik.errors.joiningDate}
+                    {formik.errors.join_date}
                   </div>
                 )}
-              </div>
-              {/* Password */}
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Password<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  className={`form-control ${
-                    formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("password")}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <div className="invalid-feedback">
-                    {formik.errors.password}
-                  </div>
-                )}
-              </div>
-              {/* Confirm Password */}
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Confirm Password<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  className={`form-control ${
-                    formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("confirmPassword")}
-                />
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
-                    <div className="invalid-feedback">
-                      {formik.errors.confirmPassword}
-                    </div>
-                  )}
               </div>
             </div>
           </div>
